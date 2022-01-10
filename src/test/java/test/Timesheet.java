@@ -1,6 +1,9 @@
 package test;
 
 import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.Status;
+
 import org.testng.AssertJUnit;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -16,11 +19,18 @@ import org.testng.annotations.Test;
 
 import DriverSetup.SetDriver;
 import objectRepository.POM_Timesheet;
+import utilities.ExtentListeners;
+import utilities.Screenshot;
 
 public class Timesheet {
 
 	public static WebDriver driver;
 	static POM_Timesheet ts;
+	
+	
+	public static WebDriver getDriver() {
+		return driver;
+	}
 	
 	@BeforeSuite
 	public void setDriver() throws Exception {
@@ -34,6 +44,7 @@ public class Timesheet {
 	public void checkUser() {
 
 		System.out.println(ts.userName());
+		ExtentListeners.test.log(Status.INFO, ts.userName());
 		
 	}
 	
@@ -59,11 +70,17 @@ public class Timesheet {
 		
 		try {
 			
+			String screenshotPath = Screenshot.captureScreenshot(driver);
+			ExtentListeners.test.addScreenCaptureFromPath(screenshotPath);
+			
 			String thisWeek = driver.findElement(ts.firstWeek).getText(); 
 			String prevWeek = driver.findElement(ts.secondWeek).getText(); 
 			String prevPrevWeek = driver.findElement(ts.thirdWeek).getText(); 
 			
-			System.out.println(thisWeek + "----" + prevWeek + "------" + prevPrevWeek);
+			System.out.println(thisWeek + "\n" + prevWeek + "\n" + prevPrevWeek);
+			ExtentListeners.test.log(Status.INFO, thisWeek + "(Actual) " + dateClass.getDate(-6) + "(Expected)");
+			ExtentListeners.test.log(Status.INFO, prevWeek + "(Actual) " + dateClass.getDate(-13) + "(Expected)");
+			ExtentListeners.test.log(Status.INFO, prevPrevWeek + "(Actual) " + dateClass.getDate(-20) + "(Expected)");
 			
 			AssertJUnit.assertEquals(thisWeek, dateClass.getDate(-6));
 			AssertJUnit.assertEquals(prevWeek, dateClass.getDate(-13));
@@ -71,7 +88,8 @@ public class Timesheet {
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
-			System.out.println("Not equal");
+			System.out.println("Not Matched!!");
+			ExtentListeners.test.log(Status.INFO, "Not Matched!!");
 		}
 			
 	}
