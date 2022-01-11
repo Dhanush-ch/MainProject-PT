@@ -27,7 +27,7 @@ public class Screenshot {
 		try {
 			FileUtils.copyFile(sourceFile, destinationFile);
 			System.out.println("\n----- Error message captured -----");
-			ExtentListeners.test.log(Status.INFO, "Error message captured");
+			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

@@ -26,7 +26,7 @@ public class SetDriver {
 		FileInputStream fs = new FileInputStream(file);
 		Workbook workbook = WorkbookFactory.create(fs);
 		Sheet sheet1 = workbook.getSheet("Sheet1");
-		Row row1 = sheet1.getRow(0);
+		Row row1 = sheet1.getRow(1);
 		Cell cell0 = row1.getCell(0);
 		browser = cell0.getStringCellValue();
 		return browser;
